@@ -231,87 +231,6 @@ public class MaxBinHeapER  <V, P extends Comparable<P>> implements BinaryHeap<V,
                 }
             }
         }
-//        boolean fixDown = false;
-//        boolean fixUp = false;
-//        boolean newG = false;
-//        P toCompare = (P) (Integer) 0;
-//        int index = -1;
-//        for (Prioritized<V, P> patient : _heap) {
-//            index++;
-//            if (patient.getValue().equals(value)) {
-//                if (newPriority.compareTo(_heap.get(index).getPriority()) > 0) {
-//                    fixUp = true;
-//                } else if (newPriority.compareTo(_heap.get(index).getPriority()) < 0) {
-//                    fixDown = true;
-//                }
-//                if (newPriority.compareTo(toCompare) >= 0) { // if newPriority>=0, set node to newPriority
-//                    _heap.set(index, new Patient<>(value, newPriority));
-//                } else { // if newPriority<0
-//                    if (patient.getPriority().compareTo(toCompare) >= 0 || patient.getPriority().compareTo(newPriority) == 0) { // if the patient's current priority>=0 or =newPriority, delete the node and fix heap
-//                        _heap.set(index, _heap.get(_heap.size() - 1));
-//                        _heap.remove(_heap.size() - 1);
-//                    }
-//                    // if the patient's current priority<0 and newPriority!=current priority, do nothing
-//                }
-//                break;
-//            }
-//        }
-//        if (_heap.size() > 1) {
-//            if (fixUp) {
-//                while (index >= 0) {
-//                    int parentIndex = (int) ((Math.floor(index - 1) / 2));
-//                    Prioritized<V, P> parent = _heap.get(parentIndex);
-//                    Prioritized<V, P> child = _heap.get(index);
-//                    if (child.getPriority().compareTo(parent.getPriority()) > 0) { //if parent<child, swap and recurse up
-//                        _heap.set(parentIndex, child);
-//                        _heap.set(index, parent);
-//                        index = parentIndex;
-//                    } else {
-//                        break;
-//                    }
-//                }
-//            }
-//                if (fixDown) {
-//                    while (!(index * 2 + 1 > _heap.size() - 1)) { //recurse downwards, if maxChild>parent, swap and keep recursing
-//                        int leftChildIndex = index * 2 + 1;
-//                        int rightChildIndex = index * 2 + 2;
-//                        Prioritized<V, P> parent = _heap.get(index);
-//                        if (rightChildIndex > _heap.size() - 1) { // if the right child DNE
-//                            if (_heap.get(index).getPriority().compareTo(_heap.get(leftChildIndex).getPriority()) < 0) {
-//                                // child > parent, so swap
-//                                _heap.set(index, _heap.get(leftChildIndex));
-//                                _heap.set(leftChildIndex, parent);
-//                                index = leftChildIndex;
-//                            } else {
-//                                break;
-//                            }
-//                        } else { // if both children exist, compare and swap with the max
-//                            if (_heap.get(leftChildIndex).getPriority().compareTo(_heap.get(rightChildIndex).getPriority()) > 0) {
-//                                // left child priority > right child priority
-//                                if (_heap.get(index).getPriority().compareTo(_heap.get(leftChildIndex).getPriority()) < 0) {
-//                                    // child > parent, so swap
-//                                    _heap.set(index, _heap.get(leftChildIndex));
-//                                    _heap.set(leftChildIndex, parent);
-//                                    index = leftChildIndex;
-//                                } else {
-//                                    break;
-//                                }
-//                            } else {
-//                                // right child priority > left child priority
-//                                if (_heap.get(index).getPriority().compareTo(_heap.get(rightChildIndex).getPriority()) < 0) {
-//                                    // child > parent, so swap
-//                                    _heap.set(index, _heap.get(rightChildIndex));
-//                                    _heap.set(rightChildIndex, parent);
-//                                    index = rightChildIndex;
-//                                } else {
-//                                    break;
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//
-//        }
     }
     /**
      * TODO (Task 3): MaxBinHeapER
@@ -335,4 +254,3 @@ public class MaxBinHeapER  <V, P extends Comparable<P>> implements BinaryHeap<V,
         return _heap.toArray(result);
     }
 }
-
