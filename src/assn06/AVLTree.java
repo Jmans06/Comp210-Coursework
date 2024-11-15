@@ -1,6 +1,7 @@
 package assn06;
 
 import assn04.BST;
+import assn04.EmptyBST;
 
 import java.util.ArrayList;
 import java.lang.Math;
@@ -81,34 +82,16 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
             _left=new AVLTree<T>();
             _right=new AVLTree<T>();
             _value=element;
-            _size++;
-            _height++;
+            _size=1;
+            _height=0;
         }
         else if (element.compareTo(this.getValue())>0){
-            if (_right.isEmpty()){
-                _size++;
-                if (_left.isEmpty()){
-                    _height++;
-                }
-                _right=(AVLTree<T>) _right.insert(element);
-            }
-            else{
-                _size++;
-                _right.insert(element);
-            }
+            _right=(AVLTree<T>) _right.insert(element);
+            _size++;
         }
         else if (element.compareTo(this.getValue())<0){
-            if (_left.isEmpty()){
-                _size++;
-                if (_right.isEmpty()){
-                    _height++;
-                }
-                _left=(AVLTree<T>) _left.insert(element);
-            }
-            else{
-                _size++;
-                _left.insert(element);
-            }
+            _left=(AVLTree<T>) _left.insert(element);
+            _size++;
         }
         _height=1+Math.max(_left._height, _right._height);
         int balanceFactor;
@@ -157,8 +140,76 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     @Override
     public SelfBalancingBST<T> remove(T element) {
     	// TODO
-
-        return null;
+        if (element.compareTo(this.getValue())==0){
+            _size--;
+            if (this.getRight().isEmpty() && this.getLeft().isEmpty()){
+                return new AVLTree<>();
+            }
+            else if (this.getRight().isEmpty()){
+                return _left;
+            }
+            else if (this.getLeft().isEmpty()){
+                return _right;
+            }
+            else{
+                T low = this._right.findMin();
+                this._value=low;
+                _right=(AVLTree<T>) _right.remove(low);
+                return this;
+            }
+        }
+        else if (element.compareTo(this.getValue())>0){
+            _right=(AVLTree<T>) _right.remove(element);
+            _size--;
+        }
+        else if (element.compareTo(this.getValue())<0){
+            _left=(AVLTree<T>) _left.remove(element);
+            _size--;
+        }
+        if(!isEmpty()){
+            _height=1+Math.max(_left._height, _right._height);
+            int balanceFactor;
+            if (_left.isEmpty() && _right.isEmpty()){
+                balanceFactor=0;
+            }
+            else if(getLeft().isEmpty()){
+                balanceFactor=-(_right.height())-1;
+            }
+            else if (getRight().isEmpty()){
+                balanceFactor=_left.height()+1;
+            }
+            else {
+                balanceFactor=_left.height()-_right.height();
+            }
+            if (balanceFactor>1){ //left imbalance
+                //fix rotation checking
+                if (_left._left.isEmpty()){//LR imbalance
+                    _left=_left.rotateLeft();
+                    return this.rotateRight();
+                }
+                else if (_left._right.isEmpty() || _left._left.height()-_left._right.height()>=0){//LL imbalance
+                    return this.rotateRight();
+                }
+                else if(_left._right.height()-_right._left.height()>0){//LR imbalance
+                    _left=_left.rotateLeft();
+                    return this.rotateRight();
+                }
+            }
+            else if(balanceFactor<-1){ //right imbalance
+                if (_right._right.isEmpty()){//RL imbalance
+                    _right=_right.rotateRight();
+                    return this.rotateLeft();
+                }
+                else if (_right._left.isEmpty() || _right._right.height()-_right._left.height()>=0){//RR imbalance
+                    return this.rotateLeft();
+                }
+                else if(_right._left.height()-_right._right.height()>0){//LR imbalance
+                    _right=_right.rotateRight();
+                    return this.rotateLeft();
+                }
+            }
+        }
+        return this;
     }
 
     @Override
