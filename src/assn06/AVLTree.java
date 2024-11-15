@@ -252,15 +252,19 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     public boolean contains(T element) {
     	// TODO
         AVLTree<T> ptr=this;
-        for (int i=0; i<this._height; i++){
+        int height=this._height;
+        for (int i=0; i<=height; i++){
+            if (ptr.isEmpty()){
+                break;
+            }
             if (element.compareTo(ptr.getValue())==0){
                 return true;
             }
-            if (element.compareTo(ptr.getValue())>0){ // element > current value, go to the right
-                ptr=this._right;
+            else if (element.compareTo(ptr.getValue())>0){ // element > current value, go to the right
+                ptr=ptr._right;
             }
-            else{ // element < current value, go to the left
-                ptr=this._left;
+            else if (element.compareTo(ptr.getValue())<0){ // element < current value, go to the left
+                ptr=ptr._left;
             }
         }
         return false;
@@ -270,12 +274,14 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     @Override
     public boolean rangeContain(T start, T end) {
         // TODO
-        _left.rangeContain(start, end);
-        _right.rangeContain(start, end);
-        if (getValue().compareTo(start)>=0 && getValue().compareTo(end)<=0){
-
+        Integer low=(Integer) start;
+        Integer high=(Integer) end;
+        for (Integer i=low; i<=high; i++){
+            if (!contains((T) i)){
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     @Override

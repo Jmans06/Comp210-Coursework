@@ -15,7 +15,11 @@ public class Main {
             avl_bst=avl_bst.insert(i);
             //avl_bst = avl_bst.insert((int) (Math.random()*100));
         }
+        System.out.println(avl_bst.contains(1));
+        System.out.println(avl_bst.contains(3));
+        System.out.println(avl_bst.rangeContain(1, 3));
         avl_bst=avl_bst.remove(1);
+        System.out.println(avl_bst.rangeContain(1, 5));
         System.out.println(avl_bst.height());
         System.out.println(avl_bst.size());
 
