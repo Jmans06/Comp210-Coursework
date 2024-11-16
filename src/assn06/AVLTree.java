@@ -113,10 +113,10 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
                 _left=_left.rotateLeft();
                 return this.rotateRight();
             }
-            else if (_right.isEmpty() || _right._right.isEmpty() || _left.height()-_right.height()>=0){//LL imbalance
+            else if (_left._right.isEmpty() || _left._left.height()-_left._right.height()>=0){//LL imbalance
                 return this.rotateRight();
             }
-            else if(_right.height()-_left.height()>0){//LR imbalance
+            else if(_left._right.height()-_left._left.height()>0){//LR imbalance
                 _left=_left.rotateLeft();
                 return this.rotateRight();
             }
@@ -126,10 +126,10 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
                 _right=_right.rotateRight();
                 return this.rotateLeft();
             }
-            else if (_left.isEmpty() || _left._left.isEmpty() || _right.height()-_left.height()>=0){//LL imbalance
+            else if (_right._left.isEmpty() || _right._right.height()-_right._left.height()>=0){//LL imbalance
                 return this.rotateLeft();
             }
-            else if(_left.height()-_right.height()>0){//LR imbalance
+            else if(_right._left.height()-_right._right.height()>0){//LR imbalance
                 _right=_right.rotateRight();
                 return this.rotateLeft();
             }
@@ -140,71 +140,58 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
     @Override
     public SelfBalancingBST<T> remove(T element) {
     	// TODO
-        if (element.compareTo(this.getValue())==0){
-            _size--;
-            if (this.getRight().isEmpty() && this.getLeft().isEmpty()){
-                return new AVLTree<>();
+        if(!isEmpty()) {
+            if (element.compareTo(this.getValue()) == 0) {
+                _size--;
+                if (this._right.isEmpty() && this._left.isEmpty()) {
+                    return new AVLTree<>();
+                } else if (this.getRight().isEmpty()) {
+                    return _left;
+                } else if (this.getLeft().isEmpty()) {
+                    return _right;
+                } else {
+                    T low = this._right.findMin();
+                    this._value = low;
+                    _right = (AVLTree<T>) _right.remove(low);
+                    return this;
+                }
+            } else if (element.compareTo(this.getValue()) > 0) {
+                _right = (AVLTree<T>) _right.remove(element);
+                _size--;
+            } else if (element.compareTo(this.getValue()) < 0) {
+                _left = (AVLTree<T>) _left.remove(element);
+                _size--;
             }
-            else if (this.getRight().isEmpty()){
-                return _left;
-            }
-            else if (this.getLeft().isEmpty()){
-                return _right;
-            }
-            else{
-                T low = this._right.findMin();
-                this._value=low;
-                _right=(AVLTree<T>) _right.remove(low);
-                return this;
-            }
-        }
-        else if (element.compareTo(this.getValue())>0){
-            _right=(AVLTree<T>) _right.remove(element);
-            _size--;
-        }
-        else if (element.compareTo(this.getValue())<0){
-            _left=(AVLTree<T>) _left.remove(element);
-            _size--;
-        }
-        if(!isEmpty()){
-            _height=1+Math.max(_left._height, _right._height);
+            _height = 1 + Math.max(_left._height, _right._height);
             int balanceFactor;
-            if (_left.isEmpty() && _right.isEmpty()){
-                balanceFactor=0;
+            if (_left.isEmpty() && _right.isEmpty()) {
+                balanceFactor = 0;
+            } else if (getLeft().isEmpty()) {
+                balanceFactor = -(_right.height()) - 1;
+            } else if (getRight().isEmpty()) {
+                balanceFactor = _left.height() + 1;
+            } else {
+                balanceFactor = _left.height() - _right.height();
             }
-            else if(getLeft().isEmpty()){
-                balanceFactor=-(_right.height())-1;
-            }
-            else if (getRight().isEmpty()){
-                balanceFactor=_left.height()+1;
-            }
-            else {
-                balanceFactor=_left.height()-_right.height();
-            }
-            if (balanceFactor>1){ //left imbalance
+            if (balanceFactor > 1) { //left imbalance
                 //fix rotation checking
-                if (_left._left.isEmpty()){//LR imbalance
-                    _left=_left.rotateLeft();
+                if (_left._left.isEmpty()) {//LR imbalance
+                    _left = _left.rotateLeft();
+                    return this.rotateRight();
+                } else if (_left._right.isEmpty() || _left._left.height() - _left._right.height() >= 0) {//LL imbalance
+                    return this.rotateRight();
+                } else if (_left._right.height() - _right._left.height() > 0) {//LR imbalance
+                    _left = _left.rotateLeft();
                     return this.rotateRight();
                 }
-                else if (_left._right.isEmpty() || _left._left.height()-_left._right.height()>=0){//LL imbalance
-                    return this.rotateRight();
-                }
-                else if(_left._right.height()-_right._left.height()>0){//LR imbalance
-                    _left=_left.rotateLeft();
-                    return this.rotateRight();
-                }
-            }
-            else if(balanceFactor<-1){ //right imbalance
-                if (_right._right.isEmpty()){//RL imbalance
-                    _right=_right.rotateRight();
+            } else if (balanceFactor < -1) { //right imbalance
+                if (_right._right.isEmpty()) {//RL imbalance
+                    _right = _right.rotateRight();
                     return this.rotateLeft();
-                }
-                else if (_right._left.isEmpty() || _right._right.height()-_right._left.height()>=0){//RR imbalance
+                } else if (_right._left.isEmpty() || _right._right.height() - _right._left.height() >= 0) {//RR imbalance
                     return this.rotateLeft();
-                }
-                else if(_right._left.height()-_right._right.height()>0){//LR imbalance
-                    _right=_right.rotateRight();
+                } else if (_right._left.height() - _right._right.height() > 0) {//LR imbalance
+                    _right = _right.rotateRight();
                     return this.rotateLeft();
                 }
             }
@@ -219,12 +206,13 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
         }
         // TODO
         AVLTree<T> minPoint=this;
-        for (int i=0; i<this._height; i++) {
-            if (minPoint._left==null) {
+        int height=this._height;
+        for (int i=0; i<=height; i++) {
+            if (minPoint._left.isEmpty()) {
                 return minPoint.getValue();
             }
             else{
-                minPoint=this._left;
+                minPoint=minPoint._left;
             }
         }
         return minPoint.getValue();
@@ -237,15 +225,16 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
         }
         // TODO
         AVLTree<T> maxPoint=this;
-        for (int i=0; i<this._height; i++) {
-            if (maxPoint._right==null) {
+        int height=this._height;
+        for (int i=0; i<=height; i++) {
+            if (maxPoint._right.isEmpty()) {
                 return maxPoint.getValue();
             }
             else{
-                maxPoint=this._right;
+                maxPoint=maxPoint._right;
             }
         }
-        return maxPoint.getValue();
+        return null;
     }
 
     @Override

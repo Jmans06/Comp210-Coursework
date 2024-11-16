@@ -11,6 +11,18 @@ public class Main {
         // the variable avl_bst because the post-insertion root that is
         // returned may be different from the original root because of the insertion.
         // resulting height should be about 6.
+        avl_bst=avl_bst.insert(20);
+        avl_bst=avl_bst.remove(20);
+        avl_bst=avl_bst.insert(11);
+        avl_bst=avl_bst.insert(50);
+        avl_bst=avl_bst.insert(4);
+        avl_bst=avl_bst.insert(6);
+        avl_bst=avl_bst.insert(15);
+        avl_bst=avl_bst.insert(3);
+        avl_bst=avl_bst.insert(16);
+        avl_bst=avl_bst.insert(17);
+        System.out.println(avl_bst.findMax());
+        System.out.println(avl_bst.findMin());
         for (int i=1; i<=5; i++) {
             avl_bst=avl_bst.insert(i);
             //avl_bst = avl_bst.insert((int) (Math.random()*100));
