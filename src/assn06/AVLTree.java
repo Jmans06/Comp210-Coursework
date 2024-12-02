@@ -108,7 +108,6 @@ public class AVLTree<T extends Comparable<T>> implements SelfBalancingBST<T> {
             balanceFactor=_left.height()-_right.height();
         }
         if (balanceFactor>1){ //left imbalance
-            //fix rotation checking
             if (_left._left.isEmpty()){//LR imbalance
                 _left=_left.rotateLeft();
                 return this.rotateRight();
